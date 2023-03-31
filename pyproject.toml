@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "bard-py"
+version = "0.1.0"
+description = "Python client for Bard."
+authors = ["vsakkas <vasileios.sakkas96@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "bard_py"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiohttp = "^3.8.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
