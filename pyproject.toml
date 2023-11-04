@@ -1,16 +1,23 @@
 [tool.poetry]
 name = "bard-py"
 version = "0.1.0"
-description = "Python client for Bard."
+description = "Python Client for Bard."
 authors = ["vsakkas <vasileios.sakkas96@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "bard"}]
+packages = [{ include = "bard" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-aiohttp = "^3.8.4"
+aiohttp = "^3.8.6"
 
+[tool.poetry.group.dev.dependencies]
+black = "^23.10.1"
+mypy = "^1.6.1"
+pytest = "^7.4.3"
+pytest-asyncio = "^0.21.1"
+pytest-cov = "^4.1.0"
+thefuzz = { extras = ["speedup"], version = "^0.20.0" }
 
 [build-system]
 requires = ["poetry-core"]
