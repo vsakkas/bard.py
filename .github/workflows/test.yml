@@ -1,0 +1,43 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+    SECURE_1PSID: ${{ secrets.SECURE_1PSID }}
+    SECURE_1PSIDTS: ${{ secrets.SECURE_1PSIDTS }}
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+
+    - name: Install dependencies
+      run: poetry install
+
+    - name: Run type checker
+      run: poetry run mypy --ignore-missing-imports bard/
+
+    - name: Run tests
+      run: poetry run pytest --cov
