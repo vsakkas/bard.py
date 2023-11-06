@@ -101,6 +101,11 @@ class BardClient:
         ----------
         prompt: str
             The prompt that needs to be sent to Bard.
+
+        Returns
+        -------
+        str
+            The response from Bard.
         """
         parameters = self._build_ask_parameters()
         arguments = self._build_ask_arguments(prompt)
