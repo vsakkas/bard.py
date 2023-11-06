@@ -142,6 +142,6 @@ class BardClient:
         if self.session and not self.session.closed:
             await self.session.close()
 
-        self.conversation_id: str | None = None
-        self.response_id: str | None = None
-        self.choice_id: str | None = None
+        self.conversation_id = None
+        self.response_id = None
+        self.choice_id = None
