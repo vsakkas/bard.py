@@ -83,8 +83,6 @@ class BardClient:
                 )
 
             response_text = await response.text()
-            with open("out.html", "w") as file:
-                file.write(response_text)
 
             snlm0e_dict = re.search(r"\"SNlM0e\":\"(?P<value>.*?)\"", response_text)
 
