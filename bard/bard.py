@@ -40,8 +40,9 @@ class BardClient:
             "__Secure-1PSIDTS": self.secure_1psidts,
         }
 
-        if self.session and force_close:
+        if self.session and not self.session.closed and force_close:
             await self.session.close()
+            self.session = None
 
         if not self.session:
             self.session = ClientSession(
@@ -144,6 +145,7 @@ class BardClient:
         """
         if self.session and not self.session.closed:
             await self.session.close()
+            self.session = None
 
         self.conversation_id = None
         self.response_id = None
