@@ -7,7 +7,7 @@ from aiohttp import ClientSession
 
 from bard.constants import BARD_STREAM_GENERATE_URL, BARD_URL, BARD_VERSION, HEADERS
 from bard.exceptions import AskException, CreateConversationException
-from bard.utils import double_json_stringify
+from bard.utils import double_json_stringify, random_digit_as_string
 
 
 class BardClient:
@@ -55,7 +55,7 @@ class BardClient:
     def _build_ask_parameters(self) -> dict:
         return {
             "bl": BARD_VERSION,
-            "_reqid": "".join(str(random.randint(0, 9)) for _ in range(7)),
+            "_reqid": random_digit_as_string(7),
             "rt": "c",
         }
 
