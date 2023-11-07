@@ -17,5 +17,7 @@ HEADERS = {
     "X-Same-Domain": "1",
 }
 
+BARD_VERSION = "boq_assistant-bard-web-server_20231105.14_p0"
+
 BARD_URL = "https://bard.google.com/chat"
 BARD_STREAM_GENERATE_URL = "https://bard.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate"

@@ -5,7 +5,7 @@ from os import environ
 
 from aiohttp import ClientSession
 
-from bard.constants import BARD_STREAM_GENERATE_URL, BARD_URL, HEADERS
+from bard.constants import BARD_STREAM_GENERATE_URL, BARD_URL, BARD_VERSION, HEADERS
 from bard.exceptions import AskException, CreateConversationException
 from bard.utils import double_json_stringify
 
@@ -54,7 +54,7 @@ class BardClient:
 
     def _build_ask_parameters(self) -> dict:
         return {
-            "bl": "boq_assistant-bard-web-server_20231031.09_p7",
+            "bl": BARD_VERSION,
             "_reqid": "".join(str(random.randint(0, 9)) for _ in range(7)),
             "rt": "c",
         }
