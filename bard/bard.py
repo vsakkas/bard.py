@@ -42,6 +42,7 @@ class BardClient:
 
         if self.session and not self.session.closed and force_close:
             await self.session.close()
+            self.session = None
 
         if not self.session:
             self.session = ClientSession(
