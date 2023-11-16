@@ -1,6 +1,6 @@
 # <img src="https://raw.githubusercontent.com/vsakkas/bard.py/master/images/logo.svg?token=GHSAT0AAAAAAB7MEK465TODCKRPHN3YQY54ZKGUN4Q" width="28px" /> Bard.py
 
-[![Latest Release](https://img.shields.io/github/v/release/vsakkas/bard.py.svg)](https://github.com/vsakkas/bard.py/releases/tag/v0.2.1)
+[![Latest Release](https://img.shields.io/github/v/release/vsakkas/bard.py.svg)](https://github.com/vsakkas/bard.py/releases/tag/v0.2.2)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/vsakkas/bard.py/blob/master/LICENSE)
 
