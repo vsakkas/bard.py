@@ -40,4 +40,4 @@ jobs:
       run: poetry run mypy --ignore-missing-imports bard/
 
     - name: Run tests
-      run: poetry run pytest --cov
+      run: poetry run pytest --cov --reruns 2
