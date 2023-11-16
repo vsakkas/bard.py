@@ -6,13 +6,13 @@
 
 Python Client for Bard, a Chat Based AI tool by Google.
 
-> **Note**
+> [!NOTE]
 > This is an **unofficial** client.
 
 ## Features
 
 - Connect to Bard, Google's AI-powered personal assistant.
-- Ask questions and have a conversation.
+- Ask questions and have a continuous conversation.
 - Use asyncio for efficient and non-blocking I/O operations.
 
 ## Requirements
@@ -34,7 +34,7 @@ or, if you use [poetry](https://python-poetry.org/):
 poetry add bard-py
 ```
 
-> **Note**
+> [!TIP]
 > Make sure you're using the latest version of Bard.py to ensure best compatibility with Bard.
 
 ## Usage
@@ -134,6 +134,17 @@ async with BardClient() as bard:
     response = await bard.ask("When was Bard released?")
     print(response)
 ```
+
+### Exceptions
+
+When something goes wrong, Sydney.py might throw one of the following exceptions:
+
+| Exception                     | Meaning                                   | Solution                 |
+|-------------------------------|-------------------------------------------|--------------------------|
+| `CreateConversationException` | Failed to create conversation             | Retry or use new cookies |
+| `AskException`                | Failed to get response from Bard          | Retry or use new cookies |
+
+*For more detailed documentation and options, please refer to the code docstrings.*
 
 ## License
 
