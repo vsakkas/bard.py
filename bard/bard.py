@@ -1,5 +1,4 @@
 import json
-import random
 import re
 from os import environ
 
