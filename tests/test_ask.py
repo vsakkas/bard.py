@@ -5,7 +5,7 @@ from bard import BardClient
 
 
 @pytest.mark.asyncio
-async def test_ask() -> None:
+async def test_ask() -> bool:
     expected_responses = [
         "Hello there! How can I help you today?",
         "Hello there! How can I help you today? [Image of Bard AI Chatbot]",
