@@ -60,9 +60,25 @@ class BardClient:
 
     def _build_ask_arguments(self, prompt: str) -> dict:
         request_data = [
-            [prompt],
+            [prompt, 0, None, [], None, None, 0],
+            [""],  # TODO: Support language codes, like "en"
+            [
+                self.conversation_id if self.conversation_id else "",
+                "",
+                "",
+                self.response_id if self.response_id else None,
+                self.choice_id if self.choice_id else None,
+                [],
+            ],
+            "",  # TODO: Find what this is
+            "",  # TODO: Find what this is
             None,
-            [self.conversation_id, self.response_id, self.choice_id],
+            [1],
+            1,
+            [],
+            [],
+            1,
+            0,
         ]
 
         return {
