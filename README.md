@@ -12,7 +12,7 @@ Python Client for Bard, a Chat Based AI tool by Google.
 ## Features
 
 - Connect to Bard, Google's AI-powered personal assistant.
-- Ask questions and have a continuous conversation.
+- Ask questions and have a conversation in various tones.
 - Use asyncio for efficient and non-blocking I/O operations.
 
 ## Requirements
@@ -135,6 +135,27 @@ async with BardClient() as bard:
     print(response)
 ```
 
+
+### Tone
+
+You can set the tone when having a conversation with Bard:
+
+```python
+async with BardClient() as bard:
+    _ = await bard.ask("When was Bard released?")
+
+    response = await bard.ask("When was Bard released?", tone="Professional")
+    print(response)
+```
+
+The available options for the `tone` parameter are:
+- `Professional`
+- `Casual`
+
+> [!NOTE]
+> It is recommended to use the `tone` parameter on subsequent prompts and not in the first one. This is because this feature is typically used to change the previous response, rather than define the entire conversation tone.
+
+
 ### Exceptions
 
 When something goes wrong, Sydney.py might throw one of the following exceptions:
@@ -143,6 +164,7 @@ When something goes wrong, Sydney.py might throw one of the following exceptions
 |-------------------------------|-------------------------------------------|--------------------------|
 | `CreateConversationException` | Failed to create conversation             | Retry or use new cookies |
 | `AskException`                | Failed to get response from Bard          | Retry or use new cookies |
+| `NoResponseException`         | Received an empty response from Bard      | Wait and retry           |
 
 *For more detailed documentation and options, please refer to the code docstrings.*
 

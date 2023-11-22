@@ -5,7 +5,12 @@ from os import environ
 from aiohttp import ClientSession
 
 from bard.constants import BARD_STREAM_GENERATE_URL, BARD_URL, BARD_VERSION, HEADERS
-from bard.exceptions import AskException, CreateConversationException
+from bard.enums import ConversationTone
+from bard.exceptions import (
+    AskException,
+    CreateConversationException,
+    NoResponseException,
+)
 from bard.utils import double_json_stringify, random_digit_as_string
 
 
@@ -58,7 +63,12 @@ class BardClient:
             "rt": "c",
         }
 
-    def _build_ask_arguments(self, prompt: str) -> dict:
+    def _build_ask_arguments(self, prompt: str, tone: str | None) -> dict:
+        conversation_arguments = None
+        if tone:
+            tone_value = getattr(ConversationTone, tone.upper()).value
+            conversation_arguments = [0, [tone_value], None, None, None, None, []]
+
         request_data = [
             [prompt, 0, None, [], None, None, 0],
             [""],  # TODO: Support language codes, like "en"
@@ -72,7 +82,7 @@ class BardClient:
             ],
             "",  # TODO: Find what this is
             "",  # TODO: Find what this is
-            None,
+            conversation_arguments,
             [1],
             1,
             [],
@@ -85,6 +95,34 @@ class BardClient:
             "f.req": double_json_stringify(request_data),
             "at": self.snlm0e,
         }
+
+    async def _ask(self, prompt: str, tone: str | None = None) -> str | None:
+        parameters = self._build_ask_parameters()
+        arguments = self._build_ask_arguments(prompt, tone)
+
+        session = await self._get_session()
+
+        async with session.post(
+            BARD_STREAM_GENERATE_URL, params=parameters, data=arguments
+        ) as response:
+            if response.status != 200:
+                raise AskException(
+                    f"Failed to get response, received status: {response.status}"
+                )
+
+            response_text = await response.text()
+            response_data = json.loads(response_text.splitlines()[3])
+            # No actual response in the returned data.
+            if not response_data or not response_data[0][2]:
+                return None
+
+            message = json.loads(response_data[0][2])
+
+            self.conversation_id = message[1][0]
+            self.response_id = message[1][1]
+            self.choice_id = message[4][0][0]
+
+            return message[4][0][1][0]
 
     async def start_conversation(self) -> None:
         """
@@ -109,7 +147,7 @@ class BardClient:
 
             self.snlm0e = snlm0e_dict.group("value")
 
-    async def ask(self, prompt: str) -> str:
+    async def ask(self, prompt: str, tone: str | None = None) -> str:
         """
         Send a prompt to Bard and return the answer.
 
@@ -117,35 +155,20 @@ class BardClient:
         ----------
         prompt: str
             The prompt that needs to be sent to Bard.
+        tone: str
+            The tone that Bard will use in the next response. If no value is
+            given, it will use a default tone.
 
         Returns
         -------
         str
             The response from Bard.
         """
-        parameters = self._build_ask_parameters()
-        arguments = self._build_ask_arguments(prompt)
+        response = await self._ask(prompt=prompt, tone=tone)
+        if not response:
+            raise NoResponseException("No response was returned")
 
-        session = await self._get_session()
-
-        async with session.post(
-            BARD_STREAM_GENERATE_URL, params=parameters, data=arguments
-        ) as response:
-            if response.status != 200:
-                raise AskException(
-                    f"Failed to get response, received status: {response.status}"
-                )
-
-            response_text = await response.text()
-            response_data = json.loads(response_text.splitlines()[3])
-
-            message = json.loads(response_data[0][2])
-
-            self.conversation_id = message[1][0]
-            self.response_id = message[1][1]
-            self.choice_id = message[4][0][0]
-
-            return message[4][0][1][0]
+        return response
 
     async def reset_conversation(self) -> None:
         """
