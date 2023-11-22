@@ -4,3 +4,7 @@ class CreateConversationException(Exception):
 
 class AskException(Exception):
     pass
+
+
+class NoResponseException(Exception):
+    pass
