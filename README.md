@@ -1,6 +1,6 @@
 # <img src="https://raw.githubusercontent.com/vsakkas/bard.py/master/images/logo.svg?token=GHSAT0AAAAAAB7MEK465TODCKRPHN3YQY54ZKGUN4Q" width="28px" /> Bard.py
 
-[![Latest Release](https://img.shields.io/github/v/release/vsakkas/bard.py.svg)](https://github.com/vsakkas/bard.py/releases/tag/v0.3.0)
+[![Latest Release](https://img.shields.io/github/v/release/vsakkas/bard.py.svg)](https://github.com/vsakkas/bard.py/releases/tag/v0.4.0)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/vsakkas/bard.py/blob/master/LICENSE)
 
@@ -12,7 +12,8 @@ Python Client for Bard, a Chat Based AI tool by Google.
 ## Features
 
 - Connect to Bard, Google's AI-powered personal assistant.
-- Ask questions and have a conversation in various tones.
+- Ask questions and have a conversation.
+- Improve responses by defining the conversation tone and length.
 - Use asyncio for efficient and non-blocking I/O operations.
 
 ## Requirements
@@ -154,6 +155,25 @@ The available options for the `tone` parameter are:
 
 > [!NOTE]
 > It is recommended to use the `tone` parameter on subsequent prompts and not in the first one. This is because this feature is typically used to change the previous response, rather than define the entire conversation tone.
+
+### Length
+
+You can set the response length when having a conversation with Bard:
+
+```python
+async with BardClient() as bard:
+    _ = await bard.ask("When was Bard released?")
+
+    response = await bard.ask("When was Bard released?", length="Short")
+    print(response)
+```
+
+The available options for the `length` parameter are:
+- `Short`
+- `Long`
+
+> [!NOTE]
+> It is recommended to use the `length` parameter on subsequent prompts and not in the first one. This is because this feature is typically used to change the previous response, rather than define the entire conversation length.
 
 
 ### Exceptions

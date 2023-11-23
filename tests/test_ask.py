@@ -89,6 +89,35 @@ async def test_ask_professional() -> bool:
 
 
 @pytest.mark.asyncio
+async def tesk_ask_short() -> bool:
+    expected_responses = [
+        "4.",
+        "You have 1 apple left today.",
+        "You have 4 apples left.",
+        "You have 4 apples today.",
+        "You still have 4 apples.",
+    ]
+
+    async with BardClient() as bard:
+        _ = await bard.ask(
+            "I have 4 apples today. I ate 3 apples yesterday. How many apples do I have today?"
+        )
+
+        response = await bard.ask(
+            "I have 4 apples today. I ate 3 apples yesterday. How many apples do I have today?",
+            length="Short",
+        )
+
+        score = 0
+        for expected_response in expected_responses:
+            score = fuzz.token_sort_ratio(response, expected_response)
+            if score >= 80:
+                return True
+
+        assert False, f"Unexpected response: {response}, match score: {score}"
+
+
+@pytest.mark.asyncio
 async def test_ask_multiple_prompts() -> None:
     async with BardClient() as bard:
         _ = await bard.ask("Tell me a joke.")
