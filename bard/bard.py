@@ -5,7 +5,7 @@ from os import environ
 from aiohttp import ClientSession
 
 from bard.constants import BARD_STREAM_GENERATE_URL, BARD_URL, BARD_VERSION, HEADERS
-from bard.enums import ConversationTone
+from bard.enums import ConversationLength, ConversationTone
 from bard.exceptions import (
     AskException,
     CreateConversationException,
@@ -63,11 +63,29 @@ class BardClient:
             "rt": "c",
         }
 
-    def _build_ask_arguments(self, prompt: str, tone: str | None) -> dict:
+    def _build_ask_arguments(
+        self, prompt: str, tone: str | None, length: str | None
+    ) -> dict:
         conversation_arguments = None
+
+        tone_value = 0
+        length_value = 0
+
         if tone:
             tone_value = getattr(ConversationTone, tone.upper()).value
-            conversation_arguments = [0, [tone_value], None, None, None, None, []]
+        if length:
+            length_value = getattr(ConversationLength, length.upper()).value
+
+        if tone or length:
+            conversation_arguments = [
+                length_value,
+                [tone_value],
+                None,
+                None,
+                None,
+                None,
+                [],
+            ]
 
         request_data = [
             [prompt, 0, None, [], None, None, 0],
@@ -80,8 +98,8 @@ class BardClient:
                 self.choice_id if self.choice_id else None,
                 [],
             ],
-            "",  # TODO: Find what this is
-            "",  # TODO: Find what this is
+            "",  # TODO: Find out what this is
+            "",  # TODO: Find out what this is
             conversation_arguments,
             [1],
             1,
@@ -96,9 +114,11 @@ class BardClient:
             "at": self.snlm0e,
         }
 
-    async def _ask(self, prompt: str, tone: str | None = None) -> str | None:
+    async def _ask(
+        self, prompt: str, tone: str | None = None, length: str | None = None
+    ) -> str | None:
         parameters = self._build_ask_parameters()
-        arguments = self._build_ask_arguments(prompt, tone)
+        arguments = self._build_ask_arguments(prompt, tone, length)
 
         session = await self._get_session()
 
@@ -147,7 +167,9 @@ class BardClient:
 
             self.snlm0e = snlm0e_dict.group("value")
 
-    async def ask(self, prompt: str, tone: str | None = None) -> str:
+    async def ask(
+        self, prompt: str, tone: str | None = None, length: str | None = None
+    ) -> str:
         """
         Send a prompt to Bard and return the answer.
 
@@ -157,14 +179,18 @@ class BardClient:
             The prompt that needs to be sent to Bard.
         tone: str
             The tone that Bard will use in the next response. If no value is
-            given, it will use a default tone.
+            given, it will use a default tone which will depend on the provided
+            prompt.
+        length: str
+            The length that Bard will stick to in the next response. If no value is
+            given, the length will depend on the provided prompt.
 
         Returns
         -------
         str
             The response from Bard.
         """
-        response = await self._ask(prompt=prompt, tone=tone)
+        response = await self._ask(prompt=prompt, tone=tone, length=length)
         if not response:
             raise NoResponseException("No response was returned")
 

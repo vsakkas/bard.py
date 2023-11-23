@@ -14,3 +14,16 @@ class ConversationTone(Enum):
     CASUAL = 2
     SIMPLE = 4
     PROFESSIONAL = 5
+
+
+class ConversationLength(Enum):
+    """
+    Bard conversation length. Supported options are:
+    - `Default`
+    - `Short`
+    - `Long`
+    """
+
+    DEFAULT = 0
+    SHORT = 1
+    LONG = 2
