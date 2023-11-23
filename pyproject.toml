@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bard-py"
-version = "0.2.3"
+version = "0.3.0"
 description = "Python Client for Bard."
 authors = ["vsakkas <vasileios.sakkas96@gmail.com>"]
 license = "MIT"
